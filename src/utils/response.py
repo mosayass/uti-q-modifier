@@ -1,5 +1,5 @@
 from sdks.novavision.src.helper.package import PackageHelper
-from components.QModifier.src.models.QModifierModel import QModifierModel, QModifierConfigs, ConfigExecutor, \
+from components.QModifier.src.models.QModifierModel import PackageModel, PackageConfigs, ConfigExecutor, \
     QModifierOutputs, QModifierResponse, QModifierExecutor, OutputImage
 
 
@@ -9,8 +9,8 @@ def build_response(context):
     qmodifierResponse = QModifierResponse(outputs=Outputs)
     qmodifierExecutor = QModifierExecutor(value=qmodifierResponse)
     executor = ConfigExecutor(value=qmodifierExecutor)
-    qmodifierConfigs = QModifierConfigs(executor=executor)
+    packageConfigs = PackageConfigs(executor=executor)
 
-    package = PackageHelper(packageModel=QModifierModel, packageConfigs=qmodifierConfigs)
-    qmodifierModel = package.build_model(context)
-    return qmodifierModel
+    package = PackageHelper(packageModel=PackageModel, packageConfigs=packageConfigs)
+    packageModel = package.build_model(context)
+    return packageModel

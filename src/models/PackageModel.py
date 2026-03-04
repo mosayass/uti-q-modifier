@@ -95,10 +95,10 @@ class ConfigExecutor(Config):
             "target": "value"
         }
 
-class QModifierConfigs(Configs):
+class PackageConfigs(Configs):
     executor: ConfigExecutor
 
-class QModifierModel(Package):
-    configs: QModifierConfigs
+class PackageModel(Package):
+    configs: PackageConfigs
     type: Literal["component"] = "component"
     name: Literal["QModifier"] = "QModifier"
