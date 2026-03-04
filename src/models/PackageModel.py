@@ -1,8 +1,6 @@
-
 from pydantic import Field, validator
 from typing import List, Optional, Union, Literal
 from sdks.novavision.src.base.model import Package, Image, Inputs, Configs, Outputs, Response, Request, Output, Input, Config
-
 
 class InputImage(Input):
     name: Literal["inputImage"] = "inputImage"
@@ -20,10 +18,9 @@ class InputImage(Input):
     class Config:
         title = "Image"
 
-
 class OutputImage(Output):
     name: Literal["outputImage"] = "outputImage"
-    value: Union[List[Image],Image]
+    value: Union[List[Image], Image]
     type: str = "object"
 
     @validator("type", pre=True, always=True)
@@ -37,99 +34,58 @@ class OutputImage(Output):
     class Config:
         title = "Image"
 
-
-class KeepSideFalse(Config):
-    name: Literal["False"] = "False"
-    value: Literal[False] = False
-    type: Literal["bool"] = "bool"
-    field: Literal["option"] = "option"
-
-    class Config:
-        title = "Disable"
-
-
-class KeepSideTrue(Config):
-    name: Literal["True"] = "True"
-    value: Literal[True] = True
-    type: Literal["bool"] = "bool"
-    field: Literal["option"] = "option"
-
-    class Config:
-        title = "Enable"
-
-
-class KeepSideBBox(Config):
+class QValue(Config):
     """
-        Rotate image without catting off sides.
+        Input field for the Q modifier value.
     """
-    name: Literal["KeepSide"] = "KeepSide"
-    value: Union[KeepSideTrue, KeepSideFalse]
-    type: Literal["object"] = "object"
-    field: Literal["dropdownlist"] = "dropdownlist"
-
-    class Config:
-        title = "Keep Sides"
-
-
-class Degree(Config):
-    """
-        Positive angles specify counterclockwise rotation while negative angles indicate clockwise rotation.
-    """
-    name: Literal["Degree"] = "Degree"
-    value: int = Field(ge=-359.0, le=359.0,default=0)
+    name: Literal["QValue"] = "QValue"
+    value: float = Field(default=0.0)
     type: Literal["number"] = "number"
     field: Literal["textInput"] = "textInput"
-    placeHolder: Literal["[-359, 359]"] = "[-359, 359]"
+    placeHolder: Literal["Enter Q Value"] = "Enter Q Value"
 
     class Config:
-        title = "Angle"
+        title = "Q Value"
 
-
-class PackageInputs(Inputs):
+class QModifierInputs(Inputs):
     inputImage: InputImage
 
+# Note: Renamed from PackageConfigs to avoid duplicate class names in the same file
+class QModifierRequestConfigs(Configs):
+    qValue: QValue
 
-class PackageConfigs(Configs):
-    degree: Degree
-    drawBBox: KeepSideBBox
-
-
-class PackageOutputs(Outputs):
+class QModifierOutputs(Outputs):
     outputImage: OutputImage
 
-
-class PackageRequest(Request):
-    inputs: Optional[PackageInputs]
-    configs: PackageConfigs
+class QModifierRequest(Request):
+    inputs: Optional[QModifierInputs]
+    configs: QModifierRequestConfigs
 
     class Config:
         json_schema_extra = {
             "target": "configs"
         }
 
+class QModifierResponse(Response):
+    outputs: QModifierOutputs
 
-class PackageResponse(Response):
-    outputs: PackageOutputs
-
-
-class PackageExecutor(Config):
-    name: Literal["Package"] = "Package"
-    value: Union[PackageRequest, PackageResponse]
+class QModifierExecutor(Config):
+    name: Literal["QModifier"] = "QModifier"
+    value: Union[QModifierRequest, QModifierResponse]
     type: Literal["object"] = "object"
     field: Literal["option"] = "option"
 
     class Config:
-        title = "Package"
+        title = "QModifier"
         json_schema_extra = {
             "target": {
                 "value": 0
             }
         }
 
-
 class ConfigExecutor(Config):
     name: Literal["ConfigExecutor"] = "ConfigExecutor"
-    value: Union[PackageExecutor]
+    value: Union[QModifierExecutor]
     type: Literal["executor"] = "executor"
     field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
 
@@ -139,12 +95,10 @@ class ConfigExecutor(Config):
             "target": "value"
         }
 
-
-class PackageConfigs(Configs):
+class QModifierConfigs(Configs):
     executor: ConfigExecutor
 
-
-class PackageModel(Package):
-    configs: PackageConfigs
+class QModifierModel(Package):
+    configs: QModifierConfigs
     type: Literal["component"] = "component"
-    name: Literal["Package"] = "Package"
+    name: Literal["QModifier"] = "QModifier"

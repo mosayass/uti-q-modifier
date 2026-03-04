@@ -1,15 +1,16 @@
-
 from sdks.novavision.src.helper.package import PackageHelper
-from components.Package.src.models.PackageModel import PackageModel, PackageConfigs, ConfigExecutor, PackageOutputs, PackageResponse, PackageExecutor, OutputImage
+from components.QModifier.src.models.QModifierModel import QModifierModel, QModifierConfigs, ConfigExecutor, \
+    QModifierOutputs, QModifierResponse, QModifierExecutor, OutputImage
 
 
 def build_response(context):
     outputImage = OutputImage(value=context.image)
-    Outputs = PackageOutputs(outputImage=outputImage)
-    packageResponse = PackageResponse(outputs=Outputs)
-    packageExecutor = PackageExecutor(value=packageResponse)
-    executor = ConfigExecutor(value=packageExecutor)
-    packageConfigs = PackageConfigs(executor=executor)
-    package = PackageHelper(packageModel=PackageModel, packageConfigs=packageConfigs)
-    packageModel = package.build_model(context)
-    return packageModel
+    Outputs = QModifierOutputs(outputImage=outputImage)
+    qmodifierResponse = QModifierResponse(outputs=Outputs)
+    qmodifierExecutor = QModifierExecutor(value=qmodifierResponse)
+    executor = ConfigExecutor(value=qmodifierExecutor)
+    qmodifierConfigs = QModifierConfigs(executor=executor)
+
+    package = PackageHelper(packageModel=QModifierModel, packageConfigs=qmodifierConfigs)
+    qmodifierModel = package.build_model(context)
+    return qmodifierModel
