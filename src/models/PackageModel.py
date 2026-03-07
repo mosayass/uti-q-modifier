@@ -88,6 +88,7 @@ class ConfigExecutor(Config):
     value: Union[QModifierExecutor]
     type: Literal["executor"] = "executor"
     field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
+    restart: Literal[True] = True
 
     class Config:
         title = "Task"
@@ -102,3 +103,6 @@ class PackageModel(Package):
     configs: PackageConfigs
     type: Literal["component"] = "component"
     name: Literal["QModifier"] = "QModifier"
+
+    class Config:
+        title = "Package Model"
