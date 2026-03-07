@@ -5,7 +5,7 @@
 import os
 import sys
 
-from certifi.core import Package
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../../'))
 
