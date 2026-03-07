@@ -1,5 +1,5 @@
 from sdks.novavision.src.helper.package import PackageHelper
-from components.QModifier.src.models.QModifierModel import PackageModel, PackageConfigs, ConfigExecutor, \
+from components.QModifier.src.models.PackageModel import PackageModel, PackageConfigs, ConfigExecutor, \
     QModifierOutputs, QModifierResponse, QModifierExecutor, OutputImage
 
 
