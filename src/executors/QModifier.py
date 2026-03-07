@@ -5,18 +5,20 @@
 import os
 import sys
 
+
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../../../'))
 
 from sdks.novavision.src.media.image import Image
 from sdks.novavision.src.base.component import Component
 from sdks.novavision.src.helper.executor import Executor
 from components.QModifier.src.utils.response import build_response
-from components.QModifier.src.models.QModifierModel import QModifierModel
+from components.QModifier.src.models.PackageModel import PackageModel
 
 class QModifier(Component):
     def __init__(self, request, bootstrap):
         super().__init__(request, bootstrap)
-        self.request.model = QModifierModel(**(self.request.data))
+        self.request.model = PackageModel(**(self.request.data))
         self.q_value = self.request.get_param("QValue")
         self.image = self.request.get_param("inputImage")
 
