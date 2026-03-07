@@ -30,26 +30,25 @@ class QModifier(Component):
         return {}
 
     def run(self):
-        print("\n--- DEBUG START ---")
-        print(f"Type of self.image initially: {type(self.image)}")
-
-        # 1. Retrieve the frame
+        # Retrieve the image frame
         img = Image.get_frame(img=self.image, redis_db=self.redis_db)
 
-        print(f"Type of img returned by get_frame: {type(img)}")
+        # Safely convert QValue to integer to satisfy OpenCV requirements
+        q_val_int = int(float(self.q_value))
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), q_val_int]
 
-        # Check if it has a 'value' attribute
-        if hasattr(img, 'value'):
-            print(f"Type of img.value: {type(img.value)}")
-        else:
-            print("img object does NOT have a 'value' attribute!")
+        # Encode and decode the image to apply the compression artifacts
+        success, encoded_img = cv2.imencode('.jpg', img.value, encode_param)
 
-        print("--- DEBUG END ---\n")
+        if success:
+            img.value = cv2.imdecode(encoded_img, cv2.IMREAD_COLOR)
 
-        # Returning the image exactly as it is so the node completes without crashing
+        # Save the frame back to the database
         self.image = Image.set_frame(img=img, package_uID=self.uID, redis_db=self.redis_db)
-        qmodifier_model = build_response(context=self)
-        return qmodifier_model
+
+        # Build and return the response
+        package_model = build_response(context=self)
+        return package_model
 
 if "__main__" == __name__:
     Executor(sys.argv[1]).run()
