@@ -37,7 +37,7 @@ class QModifier(Component):
         encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), self.q_value]
 
         # Encode the image into memory using the JPEG format and the quality parameter
-        success, encoded_img = cv2.imencode('.jpg', img, encode_param)
+        success, encoded_img = cv2.imencode('.jpg', img.value, encode_param)
 
         if success:
             # Decode the image back to a standard frame format
